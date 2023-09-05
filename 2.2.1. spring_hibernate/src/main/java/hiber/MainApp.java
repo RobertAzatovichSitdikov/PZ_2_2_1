@@ -8,6 +8,8 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import java.sql.SQLException;
 import java.util.List;
 
+import hiber.model.Car;
+
 public class MainApp {
    public static void main(String[] args) throws SQLException {
       AnnotationConfigApplicationContext context = 
@@ -15,10 +17,10 @@ public class MainApp {
 
       UserService userService = context.getBean(UserService.class);
 
-      userService.add(new User("User1", "Lastname1", "user1@mail.ru"));
-      userService.add(new User("User2", "Lastname2", "user2@mail.ru"));
-      userService.add(new User("User3", "Lastname3", "user3@mail.ru"));
-      userService.add(new User("User4", "Lastname4", "user4@mail.ru"));
+      userService.add(new User("User1", "Lastname1", "user1@mail.ru", new Car("Series1", 1)));
+      userService.add(new User("User2", "Lastname2", "user2@mail.ru", new Car("Series2", 2)));
+      userService.add(new User("User3", "Lastname3", "user3@mail.ru", new Car("Series3", 3)));
+      userService.add(new User("User4", "Lastname4", "user4@mail.ru", new Car("Series4", 4)));
 
       List<User> users = userService.listUsers();
       for (User user : users) {
@@ -26,8 +28,11 @@ public class MainApp {
          System.out.println("First Name = "+user.getFirstName());
          System.out.println("Last Name = "+user.getLastName());
          System.out.println("Email = "+user.getEmail());
-         System.out.println();
+         System.out.println("Car = " + user.getUserCar().getModel() + " " + user.getUserCar().getSeries());
       }
+
+      User userGet = userService.get(users.get(2).getUserCar());
+      System.out.println(userGet);
 
       context.close();
    }
